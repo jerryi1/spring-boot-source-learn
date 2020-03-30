@@ -1,1 +1,2 @@
 org.springframework.context.ApplicationContextInitializer=com.lhq.boot.demo.initialize.SecondApplicationContextInitialize
+org.springframework.context.ApplicationListener=com.lhq.boot.demo.listener.FirstListener
