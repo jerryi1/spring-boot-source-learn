@@ -35,14 +35,20 @@ public class DemoApplication {
 
 
     //实现监听器的逻辑
-
     /**
      * 1 ？？？ FirstListener 执行两次的问题，按照道理来说应该是执行一次。但是却执行了两次
      * 发现自己是采用的@Component注解，并且我们在spring.factories 里面进行配置。就会出现两个，应该是spring没有对listener进行去重。或者有其他的区别
      * <p>
-     * 2
-     *
-     * @param args
+     * 2 public native boolean isAssignableFrom(Class<?> cls);
+     * class 类中包含isAssignableFrom，能够判断一个class对象是否是另一个class的子类或者是当前类
+     * <p>
+     * 3 这里的装在流程和initialize相似不在赘述
+     * <p>
+     * 4 为了减少对springListener发布事件的感知。所以spring对event进行封装
+     * SpringApplicationRunListeners listeners = getRunListeners(args);
+     * 具体执行的方法还是我们的SpringFactoryLoader的实现，配置文件在我们的spring-boot里面。
+     * 需要的传参是applicationConText来获取我们的listener 以及自定义了一个new SimpleApplicationEventMulticaster();
+     * 具体的我们可以查看代码
      */
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(DemoApplication.class);
