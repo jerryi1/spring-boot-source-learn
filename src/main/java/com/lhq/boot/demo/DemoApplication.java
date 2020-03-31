@@ -58,10 +58,33 @@ public class DemoApplication {
      * 7 AbstractApplicationEventMulticaster 我们可以查看他的listenKey的生成规则。根据type和sourceType才组装成对应的key。如果多个容器，是否在执行的时候，listener会触发两次？
      * <p>
      */
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         SpringApplication springApplication = new SpringApplication(DemoApplication.class);
         springApplication.addListeners(new SecondListener());
         springApplication.run(args);
     }
+
+
+    //refresh()介绍;
+
+    /**
+     * 1 prepareRefresh()，没有什么难度和好说的
+     * 初始化当前的状态--》验证必备的属性--》初始化earlyApplicationListeners，earlyApplicationEvents
+     * <p>
+     * 2 ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+     * this.beanFactory = new DefaultListableBeanFactory();  GenericApplicationContext构造器自动返回了DefaultListableBeanFactory
+     * <p>
+     * 3 prepareBeanFactory(beanFactory);
+     * 添加了对应的classLoader,spel解析器，属性转换器。忽略了一些一类等。具体为什么这么做还是不太清楚。
+     * <p>
+     * 4 postProcessBeanFactory(beanFactory); 提供给子类进行扩展
+     * <p>
+     * 5 invokeBeanFactoryPostProcessors(beanFactory); 调用beanFactory的后置处理器
+     *
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
 
 }
