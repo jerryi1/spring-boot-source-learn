@@ -35,6 +35,7 @@ public class DemoApplication {
 
 
     //实现监听器的逻辑
+
     /**
      * 1 ？？？ FirstListener 执行两次的问题，按照道理来说应该是执行一次。但是却执行了两次
      * 发现自己是采用的@Component注解，并且我们在spring.factories 里面进行配置。就会出现两个，应该是spring没有对listener进行去重。或者有其他的区别
@@ -49,6 +50,13 @@ public class DemoApplication {
      * 具体执行的方法还是我们的SpringFactoryLoader的实现，配置文件在我们的spring-boot里面。
      * 需要的传参是applicationConText来获取我们的listener 以及自定义了一个new SimpleApplicationEventMulticaster();
      * 具体的我们可以查看代码
+     * <p>
+     * 5 对于SpringFactoryLoader这一块的内容，我们发现主要是通过几个步骤：1 读取spring.factories 2 转换成resource 3 读取到缓存中，映射成key-value 4 获取我们当前需要的class
+     * <p>
+     * 6 我们描述的SmartApplicationListener 这个接口是applicationListener接口的子接口。所以在效果上是一致的，但是需要我们进行实现获取泛型的接口
+     * <p>
+     * 7 AbstractApplicationEventMulticaster 我们可以查看他的listenKey的生成规则。根据type和sourceType才组装成对应的key。如果多个容器，是否在执行的时候，listener会触发两次？
+     * <p>
      */
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(DemoApplication.class);
