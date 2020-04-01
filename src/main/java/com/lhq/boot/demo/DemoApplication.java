@@ -1,12 +1,16 @@
 package com.lhq.boot.demo;
 
+import com.lhq.boot.demo.bean_load.*;
 import com.lhq.boot.demo.initialize.FirstApplicationContextInitialize;
 import com.lhq.boot.demo.listener.SecondListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
 
 
 @SpringBootApplication
+@Import(MyImportBean.class)
 public class DemoApplication {
 
     /**
@@ -35,7 +39,6 @@ public class DemoApplication {
 
 
     //实现监听器的逻辑
-
     /**
      * 1 ？？？ FirstListener 执行两次的问题，按照道理来说应该是执行一次。但是却执行了两次
      * 发现自己是采用的@Component注解，并且我们在spring.factories 里面进行配置。就会出现两个，应该是spring没有对listener进行去重。或者有其他的区别
@@ -80,11 +83,26 @@ public class DemoApplication {
      * 4 postProcessBeanFactory(beanFactory); 提供给子类进行扩展
      * <p>
      * 5 invokeBeanFactoryPostProcessors(beanFactory); 调用beanFactory的后置处理器
-     *
      */
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-
+    //beanLoad介绍
+    /**
+     * 我们的factoryBean不需要再次注入了
+     */
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+        FirstBean bean = context.getBean(FirstBean.class);
+        System.out.println("first-bean" + bean);
+        SecondBean secondBean = context.getBean(SecondBean.class);
+        System.out.println("second-bean" + secondBean);
+        ThirdBean thirdBean = context.getBean("thirdBean", ThirdBean.class);
+        System.out.println("third-bean" + thirdBean);
+        FourthBean father = context.getBean("father", FourthBean.class);
+        System.out.println(father);
+        FiveBean monther = context.getBean("monther", FiveBean.class);
+        System.out.println(monther);
+    }
 }

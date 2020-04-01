@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @author lihuaqing
  * @date 2020-03-29 22:09
  **/
-@Component
 @Order(3)
 public class ThirdApplicationContextInitialize implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
