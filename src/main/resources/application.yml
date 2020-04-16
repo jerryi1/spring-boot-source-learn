@@ -1,0 +1,15 @@
+context:
+  initializer:
+    classes: 'com.lhq.boot.demo.initialize.ThirdApplicationContextInitialize'
+  listener:
+    classes: 'com.lhq.boot.demo.listener.ThirdListener'
+operate:
+  name: 'lhq'
+
+
+#≈‰÷√Œ“√«µƒredis
+spring:
+  redis:
+    database: 0
+    port: 6379
+    host: 127.0.0.1

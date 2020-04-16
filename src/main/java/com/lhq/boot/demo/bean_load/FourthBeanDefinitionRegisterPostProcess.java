@@ -25,6 +25,7 @@ public class FourthBeanDefinitionRegisterPostProcess implements BeanDefinitionRe
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
+        //这里我们也可以设置一些其他的beanFactory设置，我们也可以进行Bean的注入
+        beanFactory.registerSingleton("other", new SecondBean());
     }
 }

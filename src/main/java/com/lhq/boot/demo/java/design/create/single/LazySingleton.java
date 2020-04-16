@@ -1,4 +1,4 @@
-package com.lhq.boot.demo.java.design.create;
+package com.lhq.boot.demo.java.design.create.single;
 
 /**
  * 懒汉式的单例模式

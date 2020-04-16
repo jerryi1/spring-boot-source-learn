@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <factory>com.lhq.boot.demo.java.design.create.factory.AppleFactory</factory>
+</root>

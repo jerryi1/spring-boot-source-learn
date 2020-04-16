@@ -5,6 +5,9 @@ import com.lhq.boot.demo.initialize.FirstApplicationContextInitialize;
 import com.lhq.boot.demo.listener.SecondListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
@@ -30,6 +33,8 @@ public class DemoApplication {
      * <p>
      * 5 springApplication.addInitializers(new FirstApplicationContextInitialize());这个是做到如何重新排序的
      * 在执行的阶段，里面的getInitializers()这个接口会执行排序。
+     * <p>
+     * 6 我们可以采用SpringFactoryLoader 获取我们自己定义的类的名称
      */
     public static void main1(String[] args) {
         SpringApplication springApplication = new SpringApplication(DemoApplication.class);
@@ -39,6 +44,7 @@ public class DemoApplication {
 
 
     //实现监听器的逻辑
+
     /**
      * 1 ？？？ FirstListener 执行两次的问题，按照道理来说应该是执行一次。但是却执行了两次
      * 发现自己是采用的@Component注解，并且我们在spring.factories 里面进行配置。就会出现两个，应该是spring没有对listener进行去重。或者有其他的区别
@@ -85,14 +91,16 @@ public class DemoApplication {
      * 5 invokeBeanFactoryPostProcessors(beanFactory); 调用beanFactory的后置处理器
      */
     public static void main3(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
+        System.out.println("这里是我们的读取的other数据" + run.getBean("other"));
     }
 
     //beanLoad介绍
+
     /**
      * 我们的factoryBean不需要再次注入了
      */
-    public static void main(String[] args) {
+    public static void main4(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         FirstBean bean = context.getBean(FirstBean.class);
         System.out.println("first-bean" + bean);
@@ -104,5 +112,34 @@ public class DemoApplication {
         System.out.println(father);
         FiveBean monther = context.getBean("monther", FiveBean.class);
         System.out.println(monther);
+    }
+
+    /**
+     * spring resource 相关的介绍
+     */
+    public static void main5(String[] args) {
+        ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
+        //com.lhq.boot.demo.bean_load.BeanConfig$$EnhancerBySpringCGLIB$$27e73d60@1cfd1875 我们可以看到是一个加强的bean(full bean)
+        System.out.println(run.getBean("beanConfig"));
+
+        //没有实现@Configuration的都是lite-bean
+        System.out.println(run.getBean("firstBean"));
+
+        //判断我们的condition是否生成firstObj
+        Object firstConfiguration = run.getBean("objBean");
+        System.out.println(firstConfiguration);
+
+        //举例说明： @Profile ---》@Conditional(ProfileCondition.class)
+        //   @ConditionalOnClass --->集成关系比较复杂
+        //   @ConditionalOnExpression
+        //   @ConditionalOnClass
+        //   @ConditionalOnMissingBean
+    }
+
+    /**
+     * redis配置
+     */
+    public static void main(String[] args){
+        SpringApplication.run(DemoApplication.class, args);
     }
 }

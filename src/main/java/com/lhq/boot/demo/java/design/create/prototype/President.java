@@ -1,4 +1,4 @@
-package com.lhq.boot.demo.java.design.create;
+package com.lhq.boot.demo.java.design.create.prototype;
 
 /**
  * 简单的单例模式的实现

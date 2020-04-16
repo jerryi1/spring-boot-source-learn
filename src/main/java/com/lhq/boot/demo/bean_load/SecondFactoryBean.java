@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @date 2020-04-01 09:32
  **/
 @Data
-public class SecondBeanFactory implements FactoryBean {
+public class SecondFactoryBean implements FactoryBean {
 
     @Override
     public Object getObject() {

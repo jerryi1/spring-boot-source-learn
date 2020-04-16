@@ -1,4 +1,4 @@
-package com.lhq.boot.demo.java.design.create;
+package com.lhq.boot.demo.java.design.create.prototype;
 
 import lombok.Data;
 
@@ -16,8 +16,11 @@ public class Prototype implements Cloneable {
 
     private List<String> works;
 
+    private SimpleBean simpleBean;
+
     public Prototype(String name) {
         this.name = name;
+        this.simpleBean = new SimpleBean("lhq", 12);
         System.out.println("具体原型创建成功！");
     }
 

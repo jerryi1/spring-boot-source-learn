@@ -1,9 +1,23 @@
 package com.lhq.boot.demo.java.design;
 
-import com.lhq.boot.demo.java.design.create.President;
-import com.lhq.boot.demo.java.design.create.Prototype;
+import com.lhq.boot.demo.java.design.create.factory.AbstractProduct;
+import com.lhq.boot.demo.java.design.create.factory.AppleFactory;
+import com.lhq.boot.demo.java.design.create.factory.OrangeFactory;
+import com.lhq.boot.demo.java.design.create.factory.SimpleFactory;
+import com.lhq.boot.demo.java.design.create.prototype.President;
+import com.lhq.boot.demo.java.design.create.prototype.Prototype;
+import com.lhq.boot.demo.java.design.create.prototype.SimpleBean;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import java.util.Arrays;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 设计模式的测试启动类
@@ -74,21 +88,48 @@ public class DesignBootStrap {
      * 浅拷贝的拷贝是基本类型，深拷贝的是其他类型
      * 基本类型：byte short int long char float double boolean (但是这些的包装类型也是ok的)
      * 引用类型：CLASS INTERFACE ARRAY NULL-TYPE
+     * Arrays.asList(),这里面的参数是不能修改的。
      */
-    public static void main(String[] args) throws CloneNotSupportedException {
+    public static void main4(String[] args) throws CloneNotSupportedException {
         //原型模式：因为java存在clone()方法，所以原型模式比较好的实现。
         Prototype prototype = new Prototype("lhq");
-        prototype.setWorks(Arrays.asList("play", "game"));
-
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("aaa");
+        arrayList.add("bbb");
+        prototype.setWorks(arrayList);
         Prototype clone = prototype.clone();
         System.out.println("prototype == clone?" + (clone == prototype));
         System.out.println("prototype.name==clone.name?" + (clone.getName().equals(prototype.getName())));
-        prototype.setName("limin");
+        SimpleBean simpleBean = prototype.getSimpleBean();
+        //这里的Obejct和aaa都是共享的参数
+        simpleBean.setAge(100);
+        prototype.getWorks().remove("aaa");
         System.out.println(prototype);
         System.out.println(clone);
-
-
     }
 
+    /**
+     * 1 简单工厂方法
+     *   简单工厂方法就是一个工厂制造一个具体的类。
+     */
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        AppleFactory appleFactory = new AppleFactory();
+        AbstractProduct apple = appleFactory.createProduct();
+        System.out.println(apple);
 
+        OrangeFactory orangeFactory = new OrangeFactory();
+        AbstractProduct orange = orangeFactory.createProduct();
+        System.out.println(orange);
+
+        //这里的模拟xml我们就不测试了
+        DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = dFactory.newDocumentBuilder();
+        Document doc = builder.parse(new File("C:\\Users\\14488\\Desktop\\temp\\spring-boot-source-learn\\src\\main\\java\\com\\lhq\\boot\\demo\\java\\design\\create\\factory\\factory.xml"));
+        NodeList nl = doc.getElementsByTagName("factory");
+        Node classNode = nl.item(0).getFirstChild();
+        //通过类名生成实例对象并将其返回
+        Class<?> c = Class.forName(classNode.getNodeValue());
+        SimpleFactory instance = (SimpleFactory) c.newInstance();
+        System.out.println(instance.createProduct());
+    }
 }
