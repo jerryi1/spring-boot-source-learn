@@ -3,6 +3,7 @@ package com.lhq.boot.demo;
 import com.lhq.boot.demo.bean_load.*;
 import com.lhq.boot.demo.initialize.FirstApplicationContextInitialize;
 import com.lhq.boot.demo.listener.SecondListener;
+import com.lhq.boot.demo.resource.FromHttpProtocolResolver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.Resource;
 
 
 @SpringBootApplication
@@ -137,9 +139,19 @@ public class DemoApplication {
     }
 
     /**
-     * redis配置
+     * 自定义我们的protocolResolver(会优先采用我们配置的方式)
      */
-    public static void main(String[] args){
-        SpringApplication.run(DemoApplication.class, args);
+    public static void main(String[] args) {
+        //添加自定义的解析器
+        ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
+//        run.addProtocolResolver(new FromHttpProtocolResolver());
+        Resource resource = run.getResource("file:C:\\Users\\14488\\Desktop\\temp\\spring-boot-source-learn\\src\\main\\resources\\application.yml");
+        System.out.println(resource.exists());
+
+        //查询对应的数据
+        Resource classResource = run.getResource("classpath:application.yml");
+
+        System.out.println(classResource.exists());
+
     }
 }

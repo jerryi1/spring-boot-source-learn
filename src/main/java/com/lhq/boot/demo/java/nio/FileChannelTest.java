@@ -1,7 +1,9 @@
 package com.lhq.boot.demo.java.nio;
 
+import io.netty.buffer.ByteBuf;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -26,7 +28,7 @@ public class FileChannelTest {
         RandomAccessFile aFile = new RandomAccessFile("script/nio-data.txt", "rw");
         FileChannel inChannel = aFile.getChannel();
 
-        ByteBuffer buf = ByteBuffer.allocate(12);
+        ByteBuffer buf = ByteBuffer.allocate(32);
 
         int bytesRead = inChannel.read(buf);
         while (bytesRead != -1) {
@@ -34,12 +36,46 @@ public class FileChannelTest {
             buf.flip();
 
             while (buf.hasRemaining()) {
-                System.out.println((char) buf.get());
+                System.out.print((char) buf.get());
+            }
+
+            buf.rewind();
+            while (buf.hasRemaining()) {
+                System.out.print((char) buf.get());
             }
 
             buf.clear();
             bytesRead = inChannel.read(buf);
         }
         aFile.close();
+    }
+
+    /**
+     * 多个buffer进行操作
+     */
+    @Test
+    public void scanner() throws IOException {
+        /**
+         * 头buffer 和 尾buffer
+         */
+        ByteBuffer headerBuffer = ByteBuffer.allocate(4);
+        ByteBuffer bodyBuffer = ByteBuffer.allocate(10);
+
+        RandomAccessFile aFile = new RandomAccessFile("script/nio-data.txt", "r");
+        ByteBuffer[] buffers = {bodyBuffer, headerBuffer};
+        while ((aFile.getChannel().read(buffers)) != -1) {
+            System.out.println("先读取header里面的数据----");
+            headerBuffer.flip();
+            while (headerBuffer.hasRemaining()) {
+                System.out.print((char) headerBuffer.get());
+            }
+
+            System.out.println("先读取body里面的数据----");
+            bodyBuffer.flip();
+            while (bodyBuffer.hasRemaining()) {
+                System.out.println((char) bodyBuffer.get());
+            }
+            bodyBuffer.clear();
+        }
     }
 }
