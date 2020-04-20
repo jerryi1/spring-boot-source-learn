@@ -11,11 +11,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
+
+import java.util.Properties;
 
 
 @SpringBootApplication
 @Import(MyImportBean.class)
+//@PropertySource(value = {"outsize-config.properties"})
 public class DemoApplication {
 
     /**
@@ -141,7 +145,7 @@ public class DemoApplication {
     /**
      * 自定义我们的protocolResolver(会优先采用我们配置的方式)
      */
-    public static void main(String[] args) {
+    public static void main6(String[] args) {
         //添加自定义的解析器
         ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
 //        run.addProtocolResolver(new FromHttpProtocolResolver());
@@ -153,5 +157,48 @@ public class DemoApplication {
 
         System.out.println(classResource.exists());
 
+    }
+
+    /**
+     * 测试我们的配置的level(下面展示从低级到高级的配置级别) -- 这里我们就演示了就不进行详细的展示了
+     * Devtools global settings properties in the $HOME/.config/spring-boot folder when devtools is active.
+     *
+     * @TestPropertySource annotations on your tests.
+     * <p>
+     * properties attribute on your tests. Available on @SpringBootTest and the test annotations for testing a particular slice of your application.
+     * <p>
+     * Command line arguments.
+     * <p>
+     * Properties from SPRING_APPLICATION_JSON (inline JSON embedded in an environment variable or system property).
+     * <p>
+     * ServletConfig init parameters.
+     * <p>
+     * ServletContext init parameters.
+     * <p>
+     * JNDI attributes from java:comp/env.
+     * <p>
+     * Java System properties (System.getProperties()).
+     * <p>
+     * OS environment variables.
+     * <p>
+     * A RandomValuePropertySource that has properties only in random.*.
+     * <p>
+     * Profile-specific application properties outside of your packaged jar (application-{profile}.properties and YAML variants).
+     * <p>
+     * Profile-specific application properties packaged inside your jar (application-{profile}.properties and YAML variants).
+     * <p>
+     * Application properties outside of your packaged jar (application.properties and YAML variants).
+     * <p>
+     * Application properties packaged inside your jar (application.properties and YAML variants).
+     * @PropertySource annotations on your @Configuration classes. Please note that such property sources are not added to the Environment until the application context is being refreshed. This is too late to configure certain properties such as logging.* and spring.main.* which are read before refresh begins.
+     * <p>
+     * Default properties (specified by setting SpringApplication.setDefaultProperties).
+     */
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(DemoApplication.class);
+        Properties properties = new Properties();
+        properties.setProperty("lhqPwd", "lhq032613");
+        springApplication.setDefaultProperties(properties);
+        springApplication.run(args);
     }
 }

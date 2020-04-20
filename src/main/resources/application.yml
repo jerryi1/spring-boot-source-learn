@@ -5,9 +5,9 @@ context:
     classes: 'com.lhq.boot.demo.listener.ThirdListener'
 operate:
   name: 'lhq'
-
-
-#ÅäÖÃÎÒÃÇµÄredis
+#è¿™é‡Œæ˜¯æˆ‘ä»¬çš„yamlé…ç½®
+lhqPwd: 'lhq03261302'
+##é…ç½®æˆ‘ä»¬çš„redis
 spring:
   redis:
     database: 0
