@@ -2,6 +2,7 @@ package com.lhq.boot.demo.config_level;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  * 这个测试是我们项目运行完，获取我们对应的参数
  */
 @Component
+@Order(1)
 public class MyCommandLineRunner implements CommandLineRunner, EnvironmentAware {
 
     private Environment environment;

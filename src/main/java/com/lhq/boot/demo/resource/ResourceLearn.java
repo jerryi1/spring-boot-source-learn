@@ -2,6 +2,7 @@ package com.lhq.boot.demo.resource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.springframework.core.io.Resource;
 
 import java.io.*;
 import java.net.URL;
@@ -58,7 +59,6 @@ public class ResourceLearn {
 
 
         //2 复杂资源加载 ResourcePatternResolver
-
 
 
     }

@@ -1,6 +1,6 @@
 package com.lhq.boot.demo.skill;
 
-import lombok.Data;
+        import lombok.Data;
 
 @Data
 public class Animial {
